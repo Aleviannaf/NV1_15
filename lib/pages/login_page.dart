@@ -18,17 +18,19 @@ class LoginPage extends StatelessWidget {
         ),
         child: Column(
           children: [
+            
             Icon(
               Icons.people,
               size: MediaQuery.of(context).size.height * 0.3,
             ),
-            CustomTextFieldWidget(title: "Login", onChange: _controller.setLogin),
-            TextField(
-              onChanged: _controller.setPass,
+            CustomTextFieldWidget(
+              title: "Login",
+              onChange: _controller.setLogin,
+            ),
+            CustomTextFieldWidget(
+              title: "Senha",
+              onChange: _controller.setPass,
               obscureText: true,
-              decoration: const InputDecoration(
-                label: Text('Senha'),
-              ),
             ),
             const SizedBox(
               height: 20,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nv1_15/controllers/home_controller.dart';
 import 'package:nv1_15/models/post_model.dart';
 import 'package:nv1_15/repositories/home_repository_imp.dart';
-import 'package:nv1_15/repositories/home_repository_mock.dart';
+import 'package:nv1_15/services/prefes_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,7 +16,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controller.fetch();
   }
@@ -26,23 +25,34 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text("Home"),
+        title: const Text("Home"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                PrefsService.logout();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/splash', (route) => true);
+              },
+              icon: const Icon(Icons.logout))
+        ],
       ),
       body: SafeArea(
           child: ValueListenableBuilder<List<PostModel>>(
               valueListenable: _controller.post,
               builder: (_, list, __) {
                 return ListView.separated(
-                    itemCount: list.length,
-                    itemBuilder: (_, index) {
-                      return ListTile(
-                        leading: Text(list[index].id.toString()),
-                        title: Text(list[index].title),
-                        trailing: Icon(Icons.arrow_right),
-                      );
-                    },
-                    separatorBuilder: (context, index) => Divider(),
+                  itemCount: list.length,
+                  itemBuilder: (_, index) {
+                    return ListTile(
+                      leading: Text(list[index].id.toString()),
+                      title: Text(list[index].title),
+                      trailing: const Icon(Icons.arrow_right),
+                      onTap: () => Navigator.of(context)
+                          .pushNamed('/detail', arguments: list[index]),
                     );
+                  },
+                  separatorBuilder: (context, index) => const Divider(),
+                );
               })),
     );
   }
